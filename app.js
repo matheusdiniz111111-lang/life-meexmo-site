@@ -1,5 +1,5 @@
 // life meexmo — Client-side logic (localStorage-based)
-// Added micro-interactions and simple hover animations triggers
+// Added carousel for testimonials, touch support and hero parallax
 
 const STORAGE_KEY = 'life_meexmo_data_v1';
 
@@ -28,11 +28,51 @@ const caloriesBurnedEl = document.getElementById('caloriesBurned');
 const netCaloriesEl = document.getElementById('netCalories');
 const analysisText = document.getElementById('analysisText');
 
-const calChartCtx = document.getElementById('calChart').getContext('2d');
-const macroChartCtx = document.getElementById('macroChart').getContext('2d');
-const freqChartCtx = document.getElementById('freqChart').getContext('2d');
+const calChartCtx = document.getElementById('calChart')?.getContext('2d');
+const macroChartCtx = document.getElementById('macroChart')?.getContext('2d');
+const freqChartCtx = document.getElementById('freqChart')?.getContext('2d');
 
 let calChart, macroChart, freqChart;
+
+// Testimonials carousel
+const tTrack = document.getElementById('tTrack');
+const btnPrev = document.querySelector('.t-prev');
+const btnNext = document.querySelector('.t-next');
+let tIndex = 0;
+let testimonials = [];
+
+function initTestimonials(){
+  const items = Array.from(document.querySelectorAll('.testimonial'));
+  testimonials = items;
+  updateTestimonialButtons();
+  // touch support
+  let startX = null;
+  tTrack && tTrack.addEventListener('touchstart', e=>{ startX = e.touches[0].clientX; });
+  tTrack && tTrack.addEventListener('touchend', e=>{
+    if(startX === null) return;
+    const endX = e.changedTouches[0].clientX;
+    const diff = startX - endX;
+    if(diff > 30) nextTestimonial();
+    if(diff < -30) prevTestimonial();
+    startX = null;
+  });
+}
+function updateTestimonialButtons(){
+  if(!btnPrev || !btnNext) return;
+  btnPrev.disabled = testimonials.length <= 1;
+  btnNext.disabled = testimonials.length <= 1;
+}
+function showTestimonial(i){
+  if(!tTrack || testimonials.length===0) return;
+  if(i<0) i = 0; if(i>=testimonials.length) i = testimonials.length-1;
+  tIndex = i;
+  const width = testimonials[0].offsetWidth + 12; // gap
+  tTrack.style.transform = `translateX(${ - i * width }px)`;
+}
+function nextTestimonial(){ showTestimonial(tIndex + 1); }
+function prevTestimonial(){ showTestimonial(tIndex - 1); }
+btnNext && btnNext.addEventListener('click', nextTestimonial);
+btnPrev && btnPrev.addEventListener('click', prevTestimonial);
 
 // UI control
 function showDashboard(){
@@ -60,7 +100,7 @@ loginForm.addEventListener('submit', (e)=>{
 });
 
 // Workout
-workoutForm.addEventListener('submit', (e)=>{
+workoutForm && workoutForm.addEventListener('submit', (e)=>{
   e.preventDefault();
   const type = document.getElementById('w-type').value;
   const duration = parseFloat(document.getElementById('w-duration').value) || 0;
@@ -77,7 +117,7 @@ workoutForm.addEventListener('submit', (e)=>{
 });
 
 // Meal
-mealForm.addEventListener('submit', (e)=>{
+mealForm && mealForm.addEventListener('submit', (e)=>{
   e.preventDefault();
   const name = document.getElementById('m-name').value || 'Refeição';
   const calories = parseInt(document.getElementById('m-cal').value) || 0;
@@ -112,48 +152,24 @@ function getTotals(){
 
 function renderAll(){
   const {totalMealCal, totalBurn, protein, carbs, fat} = getTotals();
-  totalCaloriesEl.textContent = totalMealCal;
-  caloriesBurnedEl.textContent = totalBurn;
-  netCaloriesEl.textContent = (totalMealCal - totalBurn);
+  totalCaloriesEl && (totalCaloriesEl.textContent = totalMealCal);
+  caloriesBurnedEl && (caloriesBurnedEl.textContent = totalBurn);
+  netCaloriesEl && (netCaloriesEl.textContent = (totalMealCal - totalBurn));
 
   const dayLabels = getLastNDaysLabels(12);
   const caloriesByDay = dayLabels.map(d=> totalCaloriesOn(d));
   const burnByDay = dayLabels.map(d=> totalBurnOn(d));
 
-  if(calChart) calChart.destroy();
-  calChart = new Chart(calChartCtx, {
-    type:'bar',
-    data:{
-      labels: dayLabels,
-      datasets:[
-        { label:'Calorias consumidas', data: caloriesByDay, backgroundColor: 'rgba(225,17,17,0.9)' },
-        { label:'Calorias gastas', data: burnByDay, backgroundColor: 'rgba(20,20,20,0.95)' }
-      ]
-    },
-    options:{ responsive:true, plugins:{ legend:{labels:{color:'#fff'} }}, scales:{ x:{ticks:{color:'#fff'}}, y:{ ticks:{color:'#fff'} } } }
-  });
+  // Charts (guarded)
+  if(calChartCtx){ if(calChart) calChart.destroy(); calChart = new Chart(calChartCtx, {
+    type:'bar', data:{ labels: dayLabels, datasets:[ { label:'Calorias consumidas', data: caloriesByDay, backgroundColor: 'rgba(225,17,17,0.9)' }, { label:'Calorias gastas', data: burnByDay, backgroundColor: 'rgba(20,20,20,0.95)' } ] }, options:{ responsive:true, plugins:{ legend:{labels:{color:'#fff'} }}, scales:{ x:{ticks:{color:'#fff'}}, y:{ ticks:{color:'#fff'} } } }
+  }); }
 
-  if(macroChart) macroChart.destroy();
-  macroChart = new Chart(macroChartCtx, {
-    type:'doughnut',
-    data:{
-      labels:['Proteínas (g)','Carboidratos (g)','Gorduras (g)'],
-      datasets:[{ data: [protein, carbs, fat], backgroundColor: ['#ff6b6b','#ffd36b','#8b8b8b'] }]
-    },
-    options:{ plugins:{ legend:{ position:'bottom', labels:{color:'#fff'} } }, responsive:true }
-  });
+  if(macroChartCtx){ if(macroChart) macroChart.destroy(); macroChart = new Chart(macroChartCtx, { type:'doughnut', data:{ labels:['Proteínas (g)','Carboidratos (g)','Gorduras (g)'], datasets:[{ data: [protein, carbs, fat], backgroundColor: ['#ff6b6b','#ffd36b','#8b8b8b'] }] }, options:{ plugins:{ legend:{ position:'bottom', labels:{color:'#fff'} } }, responsive:true } }); }
 
   const typeCounts = {};
   state.workouts.forEach(w=> typeCounts[w.type] = (typeCounts[w.type]||0)+1);
-  if(freqChart) freqChart.destroy();
-  freqChart = new Chart(freqChartCtx, {
-    type:'bar',
-    data:{
-      labels: Object.keys(typeCounts),
-      datasets:[{ label:'Sessões', data: Object.values(typeCounts), backgroundColor: Object.keys(typeCounts).map(()=> '#e11') }]
-    },
-    options:{ responsive:true, plugins:{ legend:{display:false}}, scales:{ x:{ticks:{color:'#fff'}}, y:{ ticks:{color:'#fff'} } } }
-  });
+  if(freqChartCtx){ if(freqChart) freqChart.destroy(); freqChart = new Chart(freqChartCtx, { type:'bar', data:{ labels: Object.keys(typeCounts), datasets:[{ label:'Sessões', data: Object.values(typeCounts), backgroundColor: Object.keys(typeCounts).map(()=> '#e11') }] }, options:{ responsive:true, plugins:{ legend:{display:false}}, scales:{ x:{ticks:{color:'#fff'}}, y:{ ticks:{color:'#fff'} } } } }); }
 
   let analysis = '';
   if(state.workouts.length === 0 && state.meals.length === 0){
@@ -172,7 +188,7 @@ function renderAll(){
     else if(workoutsPerWeek <=4) analysis += 'Boa consistência — mantenha e procure progressão de cargas/intensidade.';
     else analysis += 'Excelente frequência! Foque em recuperação e qualidade.';
   }
-  analysisText.textContent = analysis;
+  analysisText && (analysisText.textContent = analysis);
 }
 
 // Utility functions
@@ -228,3 +244,9 @@ hero && hero.addEventListener('mousemove', (e)=>{
   heroLeft.style.transform = `translate(${x*8}px, ${y*6}px)`;
 });
 hero && hero.addEventListener('mouseleave', ()=>{ heroLeft.style.transform = '' });
+
+// Initialize testimonials after DOM ready
+window.addEventListener('load', ()=>{
+  initTestimonials();
+  showTestimonial(0);
+});

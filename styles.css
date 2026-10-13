@@ -10,7 +10,7 @@
 html,body{height:100%;}
 body{
   font-family: "Roboto", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  background: radial-gradient(ellipse at top left, rgba(225,17,17,0.08), transparent 10%), linear-gradient(180deg,#100a0a 0%, #0b0b0b 100%);
+  background: radial-gradient(ellipse at top left, rgba(225,17,17,0.06), transparent 10%), linear-gradient(180deg,#100a0a 0%, #0b0b0b 100%);
   color: var(--muted);
   min-height:100vh;
   display:flex;
@@ -38,27 +38,36 @@ body{
 
 /* Hero */
 .hero{
-  display:flex;
-  gap:32px;
-  padding:36px;
-  align-items:stretch;
+  position:relative;
+  overflow:visible;
+}
+.hero-overlay{ position:absolute; inset:0; background: linear-gradient(90deg, rgba(0,0,0,0.65), rgba(0,0,0,0.45)); pointer-events:none; }
+.hero-inner{
+  display:flex; gap:32px; padding:36px; align-items:stretch; position:relative; z-index:2;
+}
+.hero{
+  background-image: url('hero-bg.png'); /* place your image in repo root with this name */
+  background-position: center right;
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 .hero-left{
   flex:1;
-  background: linear-gradient(135deg,#240404, rgba(0,0,0,0.5));
+  background: linear-gradient(135deg, rgba(36,4,4,0.45), rgba(0,0,0,0.25));
   border-radius:12px;
   padding:28px;
   box-shadow: 0 6px 40px rgba(0,0,0,0.7);
   position:relative;
   overflow:hidden;
 }
-.huge{ font-size:72px; line-height:0.9; color:#fff; font-family:"Montserrat",sans-serif; text-shadow: 6px 6px 0 rgba(0,0,0,0.6); margin-bottom:6px;}
-.huge-sub{ font-size:34px; margin-top:8px; color:#fff; font-weight:700;}
-.hero-note{ margin-top:16px; color:#ffdcdc; opacity:0.95; font-weight:300;}
+.huge{ font-size:56px; line-height:0.9; color:#fff; font-family:"Montserrat",sans-serif; text-shadow: 6px 6px 0 rgba(0,0,0,0.6); margin-bottom:6px;}
+.huge-sub{ font-size:28px; margin-top:8px; color:#fff; font-weight:700;}
+.hero-note{ margin-top:12px; color:#ffdcdc; opacity:0.95; font-weight:300;}
 
-/* Shine effect */
-.shine{ position:absolute; right:-40%; top:-10%; width:40%; height:120%; background: linear-gradient(120deg, transparent, rgba(255,255,255,0.06), transparent); transform: rotate(-20deg); filter: blur(12px); opacity:0.35; pointer-events:none; animation: floatShine 6s linear infinite; }
-@keyframes floatShine{ 0%{ transform: translateX(-10%) rotate(-20deg);}50%{ transform: translateX(10%) rotate(-20deg);}100%{ transform: translateX(-10%) rotate(-20deg);} }
+.hero-features{ display:flex; gap:12px; margin-top:18px; flex-wrap:wrap; }
+.feature{ background: rgba(255,255,255,0.03); padding:10px 12px; border-radius:8px; min-width:160px; }
+.feature strong{ display:block; color:#fff; font-weight:700; }
+.feature span{ color:#ffdede; font-size:13px; }
 
 /* Login card */
 .hero-right{
@@ -79,8 +88,6 @@ body{
 .biceps-row{ display:flex; gap:8px; align-items:center; }
 .bicep{ width:120px; height:120px; transition: transform .28s cubic-bezier(.2,.9,.2,1); }
 .bicep:hover{ transform: translateY(-6px) rotate(-6deg) scale(1.04); }
-.b-outer{ transition: fill .2s ease; }
-.b-inner{ transition: fill .2s ease; }
 .motivational{ font-family:"Montserrat",sans-serif; font-weight:800; font-size:20px; color:#fff; text-align:center; margin-top:6px;}
 .motivational .accent{ color:var(--red); }
 
@@ -92,13 +99,26 @@ body{
 .btn:hover{ transform: translateY(-3px); box-shadow:0 12px 30px rgba(225,17,17,0.12); }
 .btn-primary{ background: linear-gradient(90deg,var(--red), #a10000); border:none; color:#fff; font-weight:700; }
 
-/* Dashboard */
+/* Testimonials */
+.testimonials{ margin-top:12px; padding:18px; }
+.testimonials-inner{ display:flex; align-items:center; gap:12px; max-width:1100px; margin:0 auto; }
+.t-btn{ background:transparent; color:#fff; border:none; font-size:34px; cursor:pointer; padding:6px 10px; }
+.t-track{ display:flex; gap:12px; overflow:hidden; width:100%; }
+.testimonial{ min-width:300px; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.4)); padding:16px; border-radius:10px; box-shadow: 0 6px 18px rgba(0,0,0,0.6); }
+.quote{ color:#fff; font-weight:500; }
+.author{ margin-top:10px; color:#ffdede; font-size:13px; }
+
+/* Summary */
+.summary{ padding:18px 12px; }
+.summary-inner{ max-width:1100px; margin:0 auto; }
+.summary-cards{ display:flex; gap:12px; margin-top:12px; flex-wrap:wrap; }
+.s-card{ flex:1; min-width:220px; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.4)); padding:14px; border-radius:10px; }
+
+/* Dashboard (keeps previous styles) */
 .dashboard{ display:flex; gap:20px; padding:28px; }
 .hidden{ display:none; }
 .dashboard-left{ width:420px; display:flex; flex-direction:column; gap:16px; }
 .dashboard-right{ flex:1; display:flex; flex-direction:column; gap:16px; }
-
-/* Cards */
 .card{ background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.45)); padding:16px; border-radius:12px; box-shadow: 0 6px 18px rgba(0,0,0,0.6); transition: transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s ease; }
 .card.hoverable:hover{ transform: translateY(-8px) scale(1.01); box-shadow: 0 18px 40px rgba(0,0,0,0.6); }
 .inline-form{ display:flex; flex-direction:column; gap:8px; }
@@ -111,25 +131,16 @@ body{
 .stat-value{ font-size:20px; font-weight:800; color:#fff; }
 .stat-label{ font-size:12px; color:#cfcfcf; margin-top:6px; }
 
-/* Analysis */
-.analysis #analysisText{ color:#ffecec; line-height:1.4; }
-
 /* Footer */
 .site-footer{ margin-top:auto; padding:12px 28px; border-top:1px solid rgba(255,255,255,0.03); color:#bdbdbd; text-align:center; font-size:13px; }
 
-/* Micro animations */
-@keyframes pulse {
-  0%{ transform: scale(1); box-shadow: 0 0 0 rgba(225,17,17,0.0); }
-  70%{ transform: scale(1.02); box-shadow: 0 0 30px rgba(225,17,17,0.12); }
-  100%{ transform: scale(1); box-shadow: 0 0 0 rgba(225,17,17,0.0); }
-}
-.pulse{ animation: pulse 1.8s ease-in-out infinite; }
-
 /* Responsive */
 @media (max-width:1000px){
-  .hero{ flex-direction:column; }
+  .hero-inner{ flex-direction:column; }
   .hero-right{ width:100% }
   .dashboard{ flex-direction:column; }
   .dashboard-left{ width:100% }
-  .huge{ font-size:44px; }
+  .huge{ font-size:36px; }
+  .t-track{ overflow-x:auto; scroll-snap-type:x mandatory; }
+  .testimonial{ scroll-snap-align:center; min-width:260px; }
 }
