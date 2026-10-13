@@ -19,7 +19,7 @@ body{
   -webkit-font-smoothing:antialiased;
   transition: opacity .6s ease, transform .6s cubic-bezier(.2,.9,.2,1);
 }
-body.site-entry{ opacity:0; transform: translateY(10px); }
+body.site-entry{ opacity:1; transform:none; }
 body.entered{ opacity:1; transform:none; }
 
 .site-header{
