@@ -17,25 +17,22 @@ body{
   display:flex;
   flex-direction:column;
   -webkit-font-smoothing:antialiased;
+  transition: opacity .6s ease, transform .6s cubic-bezier(.2,.9,.2,1);
 }
+body.site-entry{ opacity:0; transform: translateY(10px); }
+body.entered{ opacity:1; transform:none; }
 
 .site-header{
   padding:12px 28px;
   border-bottom: 1px solid rgba(255,255,255,0.04);
-  display:flex; align-items:center;
+  display:flex; align-items:center; justify-content:space-between;
   background:#0a0a0a;
 }
 .logo{display:flex; align-items:center; gap:12px;}
-.logo-mark{
-  width:44px; height:44px; border-radius:8px;
-  background: linear-gradient(135deg, var(--red), #820000);
-  color:#fff; display:flex; align-items:center; justify-content:center;
-  font-weight:800; font-family: "Montserrat", sans-serif;
-  box-shadow: 0 6px 18px rgba(225,17,17,0.15);
-  transition: transform .22s ease, box-shadow .22s ease;
-}
-.logo-mark:hover{ transform: translateY(-3px) scale(1.03); box-shadow: 0 12px 28px rgba(225,17,17,0.25); }
-.logo-text{ font-weight:700; letter-spacing:1px; text-transform:lowercase; color:#fff; font-family: "Montserrat", sans-serif;}
+.logo-svg{ width:220px; height:44px; }
+.user-controls{ display:flex; gap:10px; align-items:center; }
+.btn.small{ padding:6px 10px; font-size:13px; border-radius:8px; }
+.btn.outline{ background:transparent; border:1px solid rgba(255,255,255,0.06); }
 
 .hero{
   position:relative;
@@ -51,6 +48,9 @@ body{
   display:flex; gap:32px; align-items:center; justify-content:space-between;
   padding:42px 26px 40px;
 }
+.fade-in-up{ opacity:0; transform: translateY(8px); transition: opacity .6s ease, transform .6s cubic-bezier(.2,.9,.2,1); }
+.entered .fade-in-up{ opacity:1; transform:none; }
+
 .hero-left{
   flex:1; min-width:0;
   padding:24px 12px 8px 8px;
@@ -77,9 +77,6 @@ body{
   box-shadow: 0 6px 30px rgba(0,0,0,0.6);
   border:1px solid rgba(255,255,255,0.08);
 }
-.biceps-row{ display:flex; gap:8px; align-items:center; justify-content:center; }
-.bicep{ width:120px; height:120px; transition: transform .28s cubic-bezier(.2,.9,.2,1); }
-.bicep:hover{ transform: translateY(-6px) rotate(-6deg) scale(1.04); }
 .motivational{ font-family:"Montserrat",sans-serif; font-weight:800; font-size:20px; color:#fff; text-align:center; margin-top:6px;}
 .motivational .accent{ color:var(--red); }
 
@@ -94,8 +91,9 @@ body{
 .testimonials{ padding:20px 16px 8px; background:#161618; }
 .testimonials-inner{ max-width:1200px; margin:0 auto; display:flex; align-items:center; gap:12px; }
 .t-btn{ background: rgba(255,255,255,0.04); color:#fff; border:1px solid rgba(255,255,255,0.06); width:42px; height:42px; border-radius:50%; font-size:28px; cursor:pointer; }
-.t-track{ display:flex; gap:12px; width:100%; overflow:hidden; }
-.testimonial{ flex:1 0 340px; max-width:360px; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.4)); border-radius:12px; padding:18px 18px 16px; box-shadow: 0 6px 18px rgba(0,0,0,0.6); }
+.t-viewport{ overflow:hidden; flex:1; }
+.t-track{ display:flex; gap:12px; transition: transform .4s cubic-bezier(.2,.9,.2,1); }
+.testimonial{ flex:0 0 340px; max-width:360px; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.4)); border-radius:12px; padding:18px 18px 16px; box-shadow: 0 6px 18px rgba(0,0,0,0.6); }
 .quote{ color:#fff; line-height:1.6; font-size:15px; }
 .author{ margin-top:12px; color:#ffdede; font-size:13px; }
 
@@ -110,6 +108,7 @@ body{
 .sub-title{ margin-top:28px !important; }
 
 .dashboard{ display:flex; gap:20px; padding:28px; }
+.dashboard-top{ padding:0 28px 8px; }
 .hidden{ display:none; }
 .dashboard-left{ width:420px; display:flex; flex-direction:column; gap:16px; }
 .dashboard-right{ flex:1; display:flex; flex-direction:column; gap:16px; }
@@ -125,11 +124,7 @@ body{
 .analysis #analysisText{ color:#ffecec; line-height:1.4; }
 .site-footer{ margin-top:auto; padding:12px 28px; border-top:1px solid rgba(255,255,255,0.03); color:#bdbdbd; text-align:center; font-size:13px; background:#0a0a0a; }
 
-@keyframes pulse {
-  0%{ transform: scale(1); box-shadow: 0 0 0 rgba(225,17,17,0.0); }
-  70%{ transform: scale(1.02); box-shadow: 0 0 30px rgba(225,17,17,0.12); }
-  100%{ transform: scale(1); box-shadow: 0 0 0 rgba(225,17,17,0.0); }
-}
+@keyframes pulse { 0%{ transform: scale(1); box-shadow: 0 0 0 rgba(225,17,17,0.0); } 70%{ transform: scale(1.02); box-shadow: 0 0 30px rgba(225,17,17,0.12); } 100%{ transform: scale(1); box-shadow: 0 0 0 rgba(225,17,17,0.0); } }
 .pulse{ animation: pulse 1.8s ease-in-out infinite; }
 
 @media (max-width: 980px){
