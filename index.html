@@ -6,7 +6,6 @@
   <title>life meexmo — Análise de Performance</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -18,34 +17,32 @@
   </header>
 
   <main>
-    <!-- Hero / Login -->
     <section class="hero" id="hero">
       <div class="hero-overlay"></div>
       <div class="hero-inner">
         <div class="hero-left" id="heroLeft">
-          <!-- Large motivational phrases -->
+          <div class="eyebrow">fitness · nutrição · evolução</div>
           <h1 class="huge" id="huge">NUNCA PARE</h1>
           <h2 class="huge-sub" id="hugeSub">TRANSFORME-SE TODOS OS DIAS</h2>
-          <p class="hero-note">Acompanhe treino, alimentação e evolução — análise inteligente para você ir além.</p>
+          <p class="hero-note">Acompanhe treino, alimentação e evolução com uma rotina clara, motivação forte e análise inteligente.</p>
 
           <div class="hero-features">
             <div class="feature">
               <strong>Registrar</strong>
-              <span>Treinos e refeições em segundos</span>
+              <span>Treinos e refeições</span>
             </div>
             <div class="feature">
-              <strong>Visualizar</strong>
-              <span>Gráficos de calorias, macros e frequência</span>
+              <strong>Monitorar</strong>
+              <span>Calorias, macros e progresso</span>
             </div>
             <div class="feature">
-              <strong>Receber</strong>
-              <span>Insights rápidos e motivação diária</span>
+              <strong>Avançar</strong>
+              <span>Com foco e consistência</span>
             </div>
           </div>
         </div>
 
         <div class="hero-right login-card" id="loginCard">
-          <!-- Biceps SVGs -->
           <div class="biceps-row">
             <svg class="bicep" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <path class="b-outer" fill="#111" d="M8 36c0 0 6-12 16-14 10-2 14 4 18 8s8 12 8 12 2 4-2 6-6 2-10 0-10-6-18-6-12 2-12 2z"/>
@@ -66,25 +63,22 @@
           </form>
         </div>
       </div>
-
-      <!-- Mobile carousel / testimonials below hero (overlapping) -->
     </section>
 
-    <!-- Testimonials carousel -->
     <section class="testimonials" id="testimonials">
       <div class="testimonials-inner">
         <button class="t-btn t-prev" aria-label="Anterior">‹</button>
         <div class="t-track" id="tTrack">
           <article class="testimonial">
-            <p class="quote">"O life meexmo me ajudou a manter consistência. Perdi 6kg em 2 meses!"</p>
+            <p class="quote">"O life meexmo me ajudou a manter consistência. Perdi 6kg em 2 meses e hoje me sinto mais forte."</p>
             <div class="author">— Ana, 28</div>
           </article>
           <article class="testimonial">
-            <p class="quote">"Simples e direto: registro rápido, gráficos claros e motivação sempre."</p>
+            <p class="quote">"A parte de treino e alimentação ficou muito clara. Eu entendo meu progresso em poucos minutos."</p>
             <div class="author">— Carlos, 33</div>
           </article>
           <article class="testimonial">
-            <p class="quote">"A análise rápida me mostrou quando aumentar intensidade. Recomendo."</p>
+            <p class="quote">"A análise rápida me mostrou quando aumentar intensidade. Meu rendimento está muito melhor."</p>
             <div class="author">— João, 40</div>
           </article>
         </div>
@@ -92,28 +86,45 @@
       </div>
     </section>
 
-    <!-- Quick summary section -->
     <section class="summary" id="summary">
       <div class="summary-inner">
-        <h3>O que você pode usar no life meexmo</h3>
-        <div class="summary-cards">
+        <h3>Como funciona</h3>
+        <div class="summary-grid">
           <div class="s-card">
-            <h4>Registro Rápido</h4>
-            <p>Adicione treinos e refeições em segundos e acompanhe sua evolução diária.</p>
+            <span class="icon">01</span>
+            <h4>Registre treinos</h4>
+            <p>Adicione hábitos, duração, intensidade e acompanhe o ritmo da sua rotina.</p>
           </div>
           <div class="s-card">
-            <h4>Visualizações</h4>
-            <p>Gráficos interativos de calorias, macros e frequência de treinos.</p>
+            <span class="icon">02</span>
+            <h4>Controle alimentação</h4>
+            <p>Salve refeições, calorias e macros para ter uma visão real do seu consumo.</p>
           </div>
           <div class="s-card">
-            <h4>Insights</h4>
-            <p>Recomendações simples para atingir seus objetivos com base nos seus dados.</p>
+            <span class="icon">03</span>
+            <h4>Analise o progresso</h4>
+            <p>Gráficos claros mostram o que funciona e em que ponto sua evolução está.</p>
+          </div>
+        </div>
+
+        <h3 class="sub-title">O que você vai poder usar</h3>
+        <div class="summary-grid second">
+          <div class="s-card compact">
+            <h4>Dashboard de performance</h4>
+            <p>Resumos rápidos de calorias consumidas, gastas e saldo diário.</p>
+          </div>
+          <div class="s-card compact">
+            <h4>Gráficos de evolução</h4>
+            <p>Treinos por tipo, macros por refeição e tendências de energia e consistência.</p>
+          </div>
+          <div class="s-card compact">
+            <h4>Motivação diária</h4>
+            <p>Uma experiência pensada para você seguir forte sem perder foco.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Dashboard (hidden until login) -->
     <section id="dashboard" class="dashboard hidden">
       <div class="dashboard-left">
         <div class="card hoverable" id="workoutCard">
