@@ -76,10 +76,8 @@ function showTestimonial(i){
   if(i >= testimonials.length) i = testimonials.length - 1;
   tIndex = i;
   const w = testimonialWidth();
-  // use scrollTo on parent viewport for smoother behavior and robust on resize
   const viewport = tTrack.parentElement;
   if(viewport) viewport.scrollTo({ left: i * w, behavior: 'smooth' });
-  // update arrow disabled state
   updateArrowsState();
 }
 function nextTestimonial(){ showTestimonial(tIndex + 1); }
@@ -104,14 +102,12 @@ function showHero(){
   userControls && (userControls.style.display = 'none');
 }
 
-// ensure we can always return to login (logout)
 logoutBtn && logoutBtn.addEventListener('click', ()=>{
   state.user = null;
   saveData(state);
   showHero();
 });
 backToLoginBtn && backToLoginBtn.addEventListener('click', ()=>{
-  // just show hero; keep user logged in (but allow navigation)
   showHero();
 });
 
@@ -123,13 +119,11 @@ loginForm && loginForm.addEventListener('submit', (e)=>{
   if(!name) return alert('Digite seu nome.');
   state.user = name;
   saveData(state);
-  // entry animation
   const card = document.getElementById('loginCard');
   card.classList.add('pulse');
   setTimeout(()=>{ card.classList.remove('pulse'); showDashboard(); }, 600);
 });
 
-// Workouts
 workoutForm && workoutForm.addEventListener('submit', (e)=>{
   e.preventDefault();
   const type = document.getElementById('w-type').value;
@@ -146,7 +140,6 @@ workoutForm && workoutForm.addEventListener('submit', (e)=>{
   document.getElementById('w-intensity').value = 0.12;
 });
 
-// Meals
 mealForm && mealForm.addEventListener('submit', (e)=>{
   e.preventDefault();
   const name = document.getElementById('m-name').value || 'Refeição';
@@ -170,7 +163,6 @@ function flashCard(id){
   setTimeout(()=>el.classList.remove('pulse'),900);
 }
 
-// Rendering & charts
 function getTotals(){
   const totalMealCal = state.meals.reduce((s,m)=>s+m.calories,0);
   const totalBurn = state.workouts.reduce((s,w)=>s+w.caloriesBurned,0);
@@ -212,28 +204,22 @@ function renderAll(){
   analysisText && (analysisText.textContent = analysis);
 }
 
-// utils
 function yyyymmdd(dateStr){ const d = new Date(dateStr); const y = d.getFullYear(); const m = String(d.getMonth()+1).padStart(2,'0'); const day = String(d.getDate()).padStart(2,'0'); return `${y}-${m}-${day}`; }
 function getLastNDaysLabels(n){ const labels = []; const now = new Date(); for(let i=n-1;i>=0;i--){ const d = new Date(now); d.setDate(now.getDate() - i); labels.push( yyyymmdd(d.toISOString()) ); } return labels; }
 function totalCaloriesOn(ymd){ return state.meals.filter(m => yyyymmdd(m.date) === ymd).reduce((s,m)=>s+m.calories,0); }
 function totalBurnOn(ymd){ return state.workouts.filter(w => yyyymmdd(w.date) === ymd).reduce((s,w)=>s+w.caloriesBurned,0); }
 function estimateWorkoutsPerWeek(){ if(state.workouts.length === 0) return 0; const dates = state.workouts.map(w => new Date(w.date)); const min = new Date(Math.min(...dates)); const max = new Date(Math.max(...dates)); const weeks = Math.max(1, (max - min) / (1000 * 60 * 60 * 24 * 7)); return state.workouts.length / weeks; }
 
-// initial sample data
 if(state.workouts.length===0 && state.meals.length===0){ const now = new Date(); for(let d=0; d<3; d++){ const day = new Date(now); day.setDate(now.getDate() - d); state.meals.push({ name:`Exemplo ${d+1}`, calories: 1800 - d*50, protein:80, carbs:200, fat:60, date: day.toISOString() }); } state.workouts.push({ type:'Musculação', duration:45, intensityFactor:0.12, caloriesBurned: Math.round(45*0.12*10), date: new Date().toISOString() }); saveData(state); }
 
 if(state.user) renderAll();
 
-// entry animation and testimonial init
 window.addEventListener('load', ()=>{
-  // animate entry
   document.body.classList.add('entered');
-  // testimonials
   initTestimonials();
   showTestimonial(0);
 });
 
-// hero parallax
 hero && hero.addEventListener('mousemove', (e)=>{
   const rect = hero.getBoundingClientRect();
   const x = (e.clientX - rect.left) / rect.width - 0.5;
